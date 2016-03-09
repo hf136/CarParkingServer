@@ -26,11 +26,11 @@ public class HelloController {
 
     @RequestMapping("/test")
     @ResponseBody
-    public User test(){
+    public List<User> test(){
         SqlSession session = DBUtil.openSession();
         IUser iuser = session.getMapper(IUser.class);
-        List<User> user = iuser.selectUser();
+        List<User> users = iuser.selectUser();
         session.close();
-        return user.get(0);
+        return users;
     }
 }
