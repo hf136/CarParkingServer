@@ -11,4 +11,20 @@
         select * from user where username = #{username}
     </select>
 
+    <insert id="addUserWithOauth" parameterType="String">
+        insert into user (username, platform) values (#{username}, #{platform})
+    </insert>
+
+    <insert id="addUser" parameterType="String">
+        insert into user (username, password) values (#{username}, #{password})
+    </insert>
+
+    <select id="getUserWithOauth" parameterType="String" resultType="pojo.User" >
+        select * from user where username = #{username} and platform = #{platform}
+    </select>
+
+    <select id="getUserById" parameterType="Integer" resultType="pojo.User" >
+        select * from user where id = #{id}
+    </select>
+
 </mapper>
