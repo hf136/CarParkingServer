@@ -34,13 +34,18 @@ public class LoginController {
         IUser iuser = session.getMapper(IUser.class);
         User user = iuser.getUserWithOauth(uid, platform);
         if(user == null){
-            System.out.printf("add new oauth user");
-            int id = iuser.addUserWithOauth(uid, platform);
-            httpSession.setAttribute("id", id);
+            user = new User();
+            user.setUsername(uid);
+            user.setPlatform(platform);
+            int line = iuser.addUserWithOauth(user);
+            httpSession.setAttribute("id", user.getId());
+            System.out.printf("add new oauth user: " + user.getId());
         }
         else{
             httpSession.setAttribute("id", user.getId());
         }
+        session.commit();
+        session.close();
         Map<String, String> map = new HashMap<String, String>();
         map.put("login", "success");
         return map;
@@ -52,6 +57,11 @@ public class LoginController {
         Map<String, String> map = new HashMap<String, String>();
         map.put("login", "success");
         return map;
+    }
+
+    @RequestMapping("/logout")
+    public void logout(HttpSession httpSession){
+        httpSession.setAttribute("id", null);
     }
 
 }

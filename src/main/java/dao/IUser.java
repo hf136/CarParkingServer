@@ -14,9 +14,9 @@ public interface IUser {
 
     public User selectUserByName(String username);
 
-    public int addUserWithOauth(@Param("username") String username, @Param("platform") String platform);
+    public int addUserWithOauth(User user);
 
-    public int addUser(@Param("username") String username, @Param("password") String password);
+    public int addUser(User user);
 
     public User getUserWithOauth(@Param("username") String username, @Param("platform") String platform);
 

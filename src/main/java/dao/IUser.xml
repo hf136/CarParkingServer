@@ -11,11 +11,11 @@
         select * from user where username = #{username}
     </select>
 
-    <insert id="addUserWithOauth" parameterType="String">
+    <insert id="addUserWithOauth" parameterType="pojo.User" useGeneratedKeys="true" keyProperty="id" >
         insert into user (username, platform) values (#{username}, #{platform})
     </insert>
 
-    <insert id="addUser" parameterType="String">
+    <insert id="addUser" parameterType="pojo.User">
         insert into user (username, password) values (#{username}, #{password})
     </insert>
 

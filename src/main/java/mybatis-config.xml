@@ -19,6 +19,7 @@
 
        <mappers>
               <mapper resource="dao/IUser.xml"/>
+              <mapper resource="dao/IParking.xml"></mapper>
        </mappers>
 
 </configuration>

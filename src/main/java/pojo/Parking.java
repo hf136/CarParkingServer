@@ -77,4 +77,18 @@ public class Parking {
     public void setAvailable(int available) {
         this.available = available;
     }
+
+    @Override
+    public String toString() {
+        return "Parking{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", latitude=" + latitude +
+                ", longitude=" + longitude +
+                ", address='" + address + '\'' +
+                ", price=" + price +
+                ", amount=" + amount +
+                ", available=" + available +
+                '}';
+    }
 }
