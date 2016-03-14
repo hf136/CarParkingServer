@@ -24,20 +24,20 @@ public class MainController {
 
     @ResponseBody
     @RequestMapping(value = "/parkinglot", method = RequestMethod.POST)
-    public String addParking(@RequestBody Parking parking){
+    public String addParking(@RequestBody List<Parking> parkings){
         SqlSession sqlSession = DBUtil.openSession();
         IParking iParking = sqlSession.getMapper(IParking.class);
-        System.out.println(parking.toString());
+        System.out.println(parkings.toString());
 
-        if(iParking.addParking(parking) == 1) {
-            sqlSession.commit();
-            sqlSession.close();
-            return "add parkinglot success";
+        for(int i=0; i<parkings.size(); i++){
+            if(iParking.addParking(parkings.get(i)) == 0) {
+                sqlSession.close();
+                return "add parking lot failed";
+            }
         }
-        else {
-            sqlSession.close();
-            return "add parkinglot failed";
-        }
+        sqlSession.commit();
+        sqlSession.close();
+        return "add parking lot success";
     }
 
     @ResponseBody
