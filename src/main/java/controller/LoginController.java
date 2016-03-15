@@ -53,15 +53,58 @@ public class LoginController {
 
     @RequestMapping("/login")
     @ResponseBody
-    public Map<String, String> login(){
+    public Map<String, String> login(String username, String password){
+        SqlSession sqlSession = DBUtil.openSession();
+        IUser iuser = sqlSession.getMapper(IUser.class);
+        User user = iuser.selectUserByName(username);
+
         Map<String, String> map = new HashMap<String, String>();
-        map.put("login", "success");
+        if(user == null || !user.getPassword().equals(password)){
+            map.put("login", "failed");
+        }
+        else {
+            map.put("login", "success");
+        }
+        sqlSession.close();
+        return map;
+    }
+
+    @RequestMapping("/register")
+    @ResponseBody
+    public Map<String, String> register(String username, String password){
+        System.out.println(username);
+        System.out.println(password);
+        SqlSession sqlSession = DBUtil.openSession();
+        IUser iUser = sqlSession.getMapper(IUser.class);
+        User user = iUser.getUserWithOauth(username, "local");
+
+        Map<String, String> map = new HashMap<String, String>();
+        if(user != null){
+            map.put("register", "failed");
+            map.put("message", "username already have.");
+            return map;
+        }
+        user = new User();
+        user.setUsername(username);
+        user.setPassword(password);
+        user.setPlatform("local");
+
+        if(iUser.addUser(user) == 1){
+            map.put("register", "success");
+        }
+        else {
+            map.put("register", "failed");
+        }
+        sqlSession.commit();
+        sqlSession.close();
         return map;
     }
 
     @RequestMapping("/logout")
-    public void logout(HttpSession httpSession){
+    @ResponseBody
+    public String logout(HttpSession httpSession){
         httpSession.setAttribute("id", null);
+        return "logout success";
     }
 
 }

@@ -16,7 +16,7 @@
     </insert>
 
     <insert id="addUser" parameterType="pojo.User">
-        insert into user (username, password) values (#{username}, #{password})
+        insert into user (username, password, platform) values (#{username}, #{password}, #{platform})
     </insert>
 
     <select id="getUserWithOauth" parameterType="String" resultType="pojo.User" >
