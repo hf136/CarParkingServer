@@ -13,6 +13,8 @@ public class Parking {
     private float price;
     private int amount;
     private int available;
+    private String image;
+    private String state;
 
     public int getId() {
         return id;
@@ -78,6 +80,22 @@ public class Parking {
         this.available = available;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     @Override
     public String toString() {
         return "Parking{" +
@@ -89,6 +107,8 @@ public class Parking {
                 ", price=" + price +
                 ", amount=" + amount +
                 ", available=" + available +
+                ", image='" + image + '\'' +
+                ", state='" + state + '\'' +
                 '}';
     }
 }

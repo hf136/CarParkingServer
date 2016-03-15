@@ -8,8 +8,8 @@
     </select>
 
     <insert id="addParking" parameterType="pojo.Parking">
-        INSERT INTO parking (name, latitude, longitude, address, price, amount, , available) VALUES
-          (${name}, #{latitude}, #{longitude}, #{address}, #{price}, #{amount}, #{available})
+        INSERT INTO parking (name, latitude, longitude, address, price, amount, available, image, state) VALUES
+          ('${name}', #{latitude}, #{longitude}, #{address}, #{price}, #{amount}, #{available}, #{image}, #{state})
     </insert>
 
 </mapper>
