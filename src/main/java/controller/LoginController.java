@@ -53,16 +53,17 @@ public class LoginController {
 
     @RequestMapping("/login")
     @ResponseBody
-    public Map<String, String> login(String username, String password){
+    public Map<String, String> login(String username, String password, HttpSession httpSession){
         SqlSession sqlSession = DBUtil.openSession();
         IUser iuser = sqlSession.getMapper(IUser.class);
-        User user = iuser.selectUserByName(username);
+        User user = iuser.getUserWithOauth(username, "local");
 
         Map<String, String> map = new HashMap<String, String>();
         if(user == null || !user.getPassword().equals(password)){
             map.put("login", "failed");
         }
         else {
+            httpSession.setAttribute("id", user.getId());
             map.put("login", "success");
         }
         sqlSession.close();

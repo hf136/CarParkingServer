@@ -16,16 +16,17 @@ public class LoginInterceptor implements HandlerInterceptor{
         //System.out.println(httpServletRequest.getRequestURL());
         System.out.println(httpServletRequest.getRequestURI());
 
-        if(httpServletRequest.getSession().getAttribute("id") == null){
-            if(httpServletRequest.getRequestURI().equals("/login")
-                    || httpServletRequest.getRequestURI().equals("/oauth")
-                    || httpServletRequest.getRequestURI().equals("/register")){
-                return true;
-            }
-            httpServletResponse.setHeader("Content-Type", "text/plain; charset=utf-8");
-            httpServletResponse.getWriter().write("您还未登录，请登录！");
-            return false;
-        }
+//        if(httpServletRequest.getSession().getAttribute("id") == null){
+//            if(httpServletRequest.getRequestURI().equals("/login")
+//                    || httpServletRequest.getRequestURI().equals("/oauth")
+//                    || httpServletRequest.getRequestURI().equals("/register")){
+//                return true;
+//            }
+//            httpServletResponse.setHeader("Content-Type", "text/plain; charset=utf-8");
+//            httpServletResponse.getWriter().write("您还未登录，请登录！");
+//            httpServletResponse.getWriter().close();
+//            return false;
+//        }
         return true;
     }
 

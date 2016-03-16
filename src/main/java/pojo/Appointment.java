@@ -1,6 +1,5 @@
 package pojo;
 
-import java.sql.Date;
 
 /**
  * Created by wuyueqiu on 16-3-9.
@@ -9,10 +8,10 @@ public class Appointment {
 
     private int id;
     private int userid;
-    private Date time;
+    private String time;
     private int parkingid;
-    private Date start_time;
-    private Date end_time;
+    private String start_time;
+    private String end_time;
     private String certificate;
     private float money;
     private String state;
@@ -33,11 +32,11 @@ public class Appointment {
         this.userid = userid;
     }
 
-    public Date getTime() {
+    public String getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(String time) {
         this.time = time;
     }
 
@@ -49,19 +48,19 @@ public class Appointment {
         this.parkingid = parkingid;
     }
 
-    public Date getStart_time() {
+    public String getStart_time() {
         return start_time;
     }
 
-    public void setStart_time(Date start_time) {
+    public void setStart_time(String start_time) {
         this.start_time = start_time;
     }
 
-    public Date getEnd_time() {
+    public String getEnd_time() {
         return end_time;
     }
 
-    public void setEnd_time(Date end_time) {
+    public void setEnd_time(String end_time) {
         this.end_time = end_time;
     }
 

@@ -21,8 +21,8 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.6.0" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.6.1" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.35" />
-          <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:3.1.0" />
           <element id="library" level="project" name="Maven: log4j:log4j:1.2.17" />
+          <element id="library" level="project" name="Maven: joda-time:joda-time:2.9.2" />
         </element>
       </element>
       <element id="javaee-facet-resources" facet="CarParkingServer/web/Web" />
