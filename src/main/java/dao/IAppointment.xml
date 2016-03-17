@@ -3,17 +3,29 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="dao.IAppointment">
 
-    <insert id="addAppointment" parameterType="pojo.Appointment">
-        INSERT INTO appointment (userid, 'time', parkingid, certificate, state, create_time) VALUES
+    <insert id="addAppointment" parameterType="pojo.Appointment" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO appointment (userid, time, parkingid, certificate, state, create_time) VALUES
           (#{userid}, #{time}, #{parkingid}, #{certificate}, #{state}, #{create_time})
     </insert>
 
-    <update id="reduceParkingNum">
-
+    <update id="reduceParkingNum" parameterType="int">
+        UPDATE parking SET available = available-1 WHERE #{parkingid} = id AND available > 0
     </update>
 
-    <select id="getAppoints">
+    <update id="increaseParkingNum">
+        UPDATE parking SET available = available+1 WHERE #{parkingid} = id AND available > 0
+    </update>
 
+    <select id="getAppoints" resultType="pojo.Appointment">
+        SELECT * FROM appointment WHERE userid = #{userid}
     </select>
+
+    <select id="getAppointByOrderid" resultType="pojo.Appointment">
+        SELECT * FROM appointment WHERE id = #{orderid}
+    </select>
+    
+    <delete id="cancelAppoint" parameterType="int">
+        DELETE FROM appointment WHERE id = #{orderid}
+    </delete>
 
 </mapper>

@@ -15,5 +15,9 @@ public interface IAppointment {
 
     public int reduceParkingNum(@Param("parkingid") int parkingid);
 
+    public int increaseParkingNum(@Param("parkingid") int parkingid);
+
     public List<Appointment> getAppoints(@Param("userid") int userid);
+
+    public int cancelAppoint(@Param("orderid") int orderid);
 }
