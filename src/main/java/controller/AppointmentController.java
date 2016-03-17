@@ -30,18 +30,22 @@ public class AppointmentController {
 
     /**
      * 预约
-     * @param appointment
+     * @param param
      * @param userid
      * @return
      */
     @ResponseBody
     @RequestMapping(value = "/appointment", method = RequestMethod.POST)
-    public Map<String, Integer> makeAppointment(@RequestBody Appointment appointment, @ModelAttribute("id") Integer userid){
-        System.out.println(appointment.getParkingid());
+    public Map<String, Integer> makeAppointment(@RequestBody Map<String, String> param, @ModelAttribute("id") Integer userid){
+        Appointment appointment = new Appointment();
+        System.out.println(param.get("parkingid"));
 //        DateTime date = DateTime.parse(appointment.getTime(), DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
         DateTimeFormatter timeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
-        DateTime date = timeFormat.parseDateTime(appointment.getTime());
+        DateTime date = timeFormat.parseDateTime(param.get("time"));
         System.out.println(date.toString());
+
+        appointment.setParkingid(Integer.parseInt(param.get("parkingid")));
+        appointment.setTime(param.get("time"));
 
         Map<String, Integer> res = new HashMap<String, Integer>();
         SqlSession sqlSession = DBUtil.openSession();
@@ -110,9 +114,9 @@ public class AppointmentController {
      */
     @ResponseBody
     @RequestMapping(value = "/appointment", method = RequestMethod.DELETE)
-    public Map<String, Integer> cancelAppointment(@RequestBody Map<String, Integer> param, @ModelAttribute("id") Integer userid){
+    public Map<String, Integer> cancelAppointment(@RequestBody Map<String, String> param, @ModelAttribute("id") Integer userid){
         Map<String, Integer> res = new HashMap<String, Integer>();
-        Integer orderid = param.get("orderid");
+        Integer orderid = Integer.parseInt(param.get("orderid"));
         System.out.println("orderid: " + orderid);
         if(orderid == null){
             res.put("code ", 2);
