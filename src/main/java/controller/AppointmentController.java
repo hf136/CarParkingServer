@@ -9,6 +9,7 @@ import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
+import pojo.AppointResult;
 import pojo.Appointment;
 import sun.misc.BASE64Encoder;
 import util.DBUtil;
@@ -40,6 +41,7 @@ public class AppointmentController {
         Appointment appointment = new Appointment();
         System.out.println(param.get("parkingid"));
 //        DateTime date = DateTime.parse(appointment.getTime(), DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
+        // 尝试转化传过来的时间字符串
         DateTimeFormatter timeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         DateTime date = timeFormat.parseDateTime(param.get("time"));
         System.out.println(date.toString());
@@ -99,10 +101,10 @@ public class AppointmentController {
      */
     @ResponseBody
     @RequestMapping(value = "/appointment", method = RequestMethod.GET)
-    public List<Appointment> getAppointment(@ModelAttribute("id") Integer userid){
+    public List<AppointResult> getAppointment(@ModelAttribute("id") Integer userid){
         SqlSession sqlSession = DBUtil.openSession();
         IAppointment iAppointment = sqlSession.getMapper(IAppointment.class);
-        List<Appointment> appointments = iAppointment.getAppoints(userid);
+        List<AppointResult> appointments = iAppointment.getAppoints(userid);
         sqlSession.close();
         return appointments;
     }

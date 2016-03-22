@@ -1,8 +1,8 @@
 package dao;
 
 import org.apache.ibatis.annotations.Param;
+import pojo.AppointResult;
 import pojo.Appointment;
-import pojo.Parking;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface IAppointment {
 
     public int increaseParkingNum(@Param("parkingid") int parkingid);
 
-    public List<Appointment> getAppoints(@Param("userid") int userid);
+    public List<AppointResult> getAppoints(@Param("userid") int userid);
 
     public int cancelAppoint(@Param("orderid") int orderid);
 }

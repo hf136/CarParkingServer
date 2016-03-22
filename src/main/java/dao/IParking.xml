@@ -12,4 +12,11 @@
           ('${name}', #{latitude}, #{longitude}, #{address}, #{price}, #{amount}, #{available}, #{image}, #{state})
     </insert>
 
+    <insert id="addParkings">
+        INSERT INTO parking (name, latitude, longitude, address, price, amount, available, image, state) VALUES
+        <foreach collection="list" item="item" separator=",">
+          ('${item.name}', #{item.latitude}, #{item.longitude}, #{item.address}, #{item.price}, #{item.amount}, #{item.available}, #{item.image}, #{item.state})
+        </foreach>
+    </insert>
+
 </mapper>
