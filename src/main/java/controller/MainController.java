@@ -34,17 +34,20 @@ public class MainController {
     @RequestMapping(value = "/parkinglots", method = RequestMethod.POST)
     public String addParkings(@RequestBody List<Parking> parkings){
         SqlSession sqlSession = DBUtil.openSession();
-        IParking iParking = sqlSession.getMapper(IParking.class);
-        System.out.println(parkings.get(0).toString());
+        try {
+            IParking iParking = sqlSession.getMapper(IParking.class);
 
-        for(int i=0; i<parkings.size(); i++){
-            if(iParking.addParking(parkings.get(i)) == 0) {
-                sqlSession.close();
-                return "add parking lot failed";
+            for (int i = 0; i < parkings.size(); i++) {
+                if (iParking.addParking(parkings.get(i)) == 0) {
+                    sqlSession.close();
+                    return "add parking lot failed";
+                }
             }
+            sqlSession.commit();
         }
-        sqlSession.commit();
-        sqlSession.close();
+        finally {
+            sqlSession.close();
+        }
         return "add parking lot success";
     }
 
@@ -52,15 +55,19 @@ public class MainController {
     @RequestMapping(value = "/parkinglot", method = RequestMethod.POST)
     public String addParking(@RequestBody Parking parking){
         SqlSession sqlSession = DBUtil.openSession();
-        IParking iParking = sqlSession.getMapper(IParking.class);
-        System.out.println(parking.toString());
+        try {
+            IParking iParking = sqlSession.getMapper(IParking.class);
+            System.out.println(parking.toString());
 
-        if(iParking.addParking(parking) == 0) {
-            sqlSession.close();
-            return "add parking lot failed";
+            if (iParking.addParking(parking) == 0) {
+                sqlSession.close();
+                return "add parking lot failed";
+            }
+            sqlSession.commit();
         }
-        sqlSession.commit();
-        sqlSession.close();
+        finally {
+            sqlSession.close();
+        }
         return "add parking lot success";
     }
 
@@ -68,9 +75,14 @@ public class MainController {
     @RequestMapping(value = "/parkinglot", method = RequestMethod.GET)
     public List<Parking> getParkingList() throws UnsupportedEncodingException {
         SqlSession sqlSession = DBUtil.openSession();
-        IParking iParking = sqlSession.getMapper(IParking.class);
-        List<Parking> parkings = iParking.getParkings();
-        sqlSession.close();
+        List<Parking> parkings;
+        try {
+            IParking iParking = sqlSession.getMapper(IParking.class);
+            parkings = iParking.getParkings();
+        }
+        finally {
+            sqlSession.close();
+        }
         return parkings;
     }
 }

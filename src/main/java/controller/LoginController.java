@@ -30,21 +30,24 @@ public class LoginController {
         System.out.println("profile_image_url: " + req.getParameter("profile_image_url"));
 
         SqlSession session = DBUtil.openSession();
-        IUser iuser = session.getMapper(IUser.class);
-        User user = iuser.getUserWithOauth(uid, platform);
-        if(user == null){
-            user = new User();
-            user.setUsername(uid);
-            user.setPlatform(platform);
-            int line = iuser.addUserWithOauth(user);
-            httpSession.setAttribute("id", user.getId());
-            System.out.printf("add new oauth user: " + user.getId());
+        try {
+            IUser iuser = session.getMapper(IUser.class);
+            User user = iuser.getUserWithOauth(uid, platform);
+            if (user == null) {
+                user = new User();
+                user.setUsername(uid);
+                user.setPlatform(platform);
+                int line = iuser.addUserWithOauth(user);
+                httpSession.setAttribute("id", user.getId());
+                System.out.printf("add new oauth user: " + user.getId());
+            } else {
+                httpSession.setAttribute("id", user.getId());
+            }
+            session.commit();
         }
-        else{
-            httpSession.setAttribute("id", user.getId());
+        finally {
+            session.close();
         }
-        session.commit();
-        session.close();
         Map<String, String> map = new HashMap<String, String>();
         map.put("login", "success");
         return map;
@@ -54,19 +57,22 @@ public class LoginController {
     @ResponseBody
     public Map<String, String> login(String username, String password, HttpSession httpSession){
         SqlSession sqlSession = DBUtil.openSession();
-        IUser iuser = sqlSession.getMapper(IUser.class);
-        User user = iuser.getUserWithOauth(username, "local");
-
         Map<String, String> map = new HashMap<String, String>();
-        if(user == null || !user.getPassword().equals(password)){
-            map.put("login", "failed");
+        try {
+            IUser iuser = sqlSession.getMapper(IUser.class);
+            User user = iuser.getUserWithOauth(username, "local");
+
+            if (user == null || !user.getPassword().equals(password)) {
+                map.put("login", "failed");
+            } else {
+                httpSession.setAttribute("id", user.getId());
+                map.put("login", "success");
+            }
+            return map;
         }
-        else {
-            httpSession.setAttribute("id", user.getId());
-            map.put("login", "success");
+        finally {
+            sqlSession.close();
         }
-        sqlSession.close();
-        return map;
     }
 
     @RequestMapping("/register")
@@ -75,28 +81,31 @@ public class LoginController {
         System.out.println(username);
         System.out.println(password);
         SqlSession sqlSession = DBUtil.openSession();
-        IUser iUser = sqlSession.getMapper(IUser.class);
-        User user = iUser.getUserWithOauth(username, "local");
-
         Map<String, String> map = new HashMap<String, String>();
-        if(user != null){
-            map.put("register", "failed");
-            map.put("message", "username already have.");
-            return map;
-        }
-        user = new User();
-        user.setUsername(username);
-        user.setPassword(password);
-        user.setPlatform("local");
+        try {
+            IUser iUser = sqlSession.getMapper(IUser.class);
+            User user = iUser.getUserWithOauth(username, "local");
 
-        if(iUser.addUser(user) == 1){
-            map.put("register", "success");
+            if (user != null) {
+                map.put("register", "failed");
+                map.put("message", "username already have.");
+                return map;
+            }
+            user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+            user.setPlatform("local");
+
+            if (iUser.addUser(user) == 1) {
+                map.put("register", "success");
+            } else {
+                map.put("register", "failed");
+            }
+            sqlSession.commit();
         }
-        else {
-            map.put("register", "failed");
+        finally {
+            sqlSession.close();
         }
-        sqlSession.commit();
-        sqlSession.close();
         return map;
     }
 

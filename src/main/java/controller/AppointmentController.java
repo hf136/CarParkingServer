@@ -40,7 +40,7 @@ public class AppointmentController {
     public Map<String, Integer> makeAppointment(@RequestBody Map<String, String> param, @ModelAttribute("id") Integer userid){
         Appointment appointment = new Appointment();
         System.out.println(param.get("parkingid"));
-//        DateTime date = DateTime.parse(appointment.getTime(), DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
+        // DateTime date = DateTime.parse(appointment.getTime(), DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
         // 尝试转化传过来的时间字符串
         DateTimeFormatter timeFormat = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
         DateTime date = timeFormat.parseDateTime(param.get("time"));
@@ -51,44 +51,49 @@ public class AppointmentController {
 
         Map<String, Integer> res = new HashMap<String, Integer>();
         SqlSession sqlSession = DBUtil.openSession();
-        IAppointment iappointment = sqlSession.getMapper(IAppointment.class);
-        // 车位库存减一
-        if(iappointment.reduceParkingNum(appointment.getParkingid()) != 1){
-            sqlSession.rollback();
-            sqlSession.close();
-            System.out.println("库存不足");
-            res.put("code", 2);
-            return res;
-        }
-        // 设置预约订单信息
-        appointment.setUserid(userid);
-        DateTime now = DateTime.now();
-        String createTime = now.toString(timeFormat);
-        System.out.println("now time: " + createTime);
-        // 预约订单创建时间
-        appointment.setCreate_time(createTime);
-        // 预约状态
-        appointment.setState("未支付");
-        // 预约凭证
+
         try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            String str = String.valueOf(System.currentTimeMillis()) + userid;
-            md5.update(str.getBytes());
-            BASE64Encoder base64Encoder = new BASE64Encoder();
-            String certificate = base64Encoder.encode(md5.digest());
-            System.out.println("md5: " + certificate);
-            appointment.setCertificate(certificate);
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            IAppointment iappointment = sqlSession.getMapper(IAppointment.class);
+            // 车位库存减一
+            if (iappointment.reduceParkingNum(appointment.getParkingid()) != 1) {
+                sqlSession.rollback();
+                sqlSession.close();
+                System.out.println("库存不足");
+                res.put("code", 2);
+                return res;
+            }
+            // 设置预约订单信息
+            appointment.setUserid(userid);
+            DateTime now = DateTime.now();
+            String createTime = now.toString(timeFormat);
+            System.out.println("now time: " + createTime);
+            // 预约订单创建时间
+            appointment.setCreate_time(createTime);
+            // 预约状态
+            appointment.setState("未支付");
+            // 预约凭证
+            try {
+                MessageDigest md5 = MessageDigest.getInstance("MD5");
+                String str = String.valueOf(System.currentTimeMillis()) + userid;
+                md5.update(str.getBytes());
+                BASE64Encoder base64Encoder = new BASE64Encoder();
+                String certificate = base64Encoder.encode(md5.digest());
+                System.out.println("md5: " + certificate);
+                appointment.setCertificate(certificate);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            if (iappointment.addAppointment(appointment) == 0) {
+                sqlSession.rollback();
+                sqlSession.close();
+                res.put("code", 2);
+                return res;
+            }
+            sqlSession.commit();
         }
-        if(iappointment.addAppointment(appointment) == 0){
-            sqlSession.rollback();
+        finally {
             sqlSession.close();
-            res.put("code", 2);
-            return res;
         }
-        sqlSession.commit();
-        sqlSession.close();
         res.put("code", 1);
         res.put("orderid", appointment.getId());
         return res;
@@ -103,10 +108,14 @@ public class AppointmentController {
     @RequestMapping(value = "/appointment", method = RequestMethod.GET)
     public List<AppointResult> getAppointment(@ModelAttribute("id") Integer userid){
         SqlSession sqlSession = DBUtil.openSession();
-        IAppointment iAppointment = sqlSession.getMapper(IAppointment.class);
-        List<AppointResult> appointments = iAppointment.getAppoints(userid);
-        sqlSession.close();
-        return appointments;
+        try {
+            IAppointment iAppointment = sqlSession.getMapper(IAppointment.class);
+            List<AppointResult> appointments = iAppointment.getAppoints(userid);
+            return appointments;
+        }
+        finally {
+            sqlSession.close();
+        }
     }
 
     /**
@@ -125,21 +134,25 @@ public class AppointmentController {
             return res;
         }
         SqlSession sqlSession = DBUtil.openSession();
-        Appointment appointment = sqlSession.selectOne("getAppointByOrderid", orderid);
-        // 判断是否是此用户的订单
-        if(appointment.getUserid() != userid){
-            res.put("code ", 2);
-            return res;
+        try {
+            Appointment appointment = sqlSession.selectOne("getAppointByOrderid", orderid);
+            // 判断是否是此用户的订单
+            if (appointment.getUserid() != userid) {
+                res.put("code ", 2);
+                return res;
+            }
+            IAppointment iAppointment = sqlSession.getMapper(IAppointment.class);
+            if (iAppointment.cancelAppoint(orderid) == 0) {
+                res.put("code ", 2);
+                return res;
+            }
+            System.out.printf("parkingid: " + appointment.getParkingid());
+            iAppointment.increaseParkingNum(appointment.getParkingid());
+            sqlSession.commit();
         }
-        IAppointment iAppointment = sqlSession.getMapper(IAppointment.class);
-        if(iAppointment.cancelAppoint(orderid) == 0){
-            res.put("code ", 2);
-            return res;
+        finally {
+            sqlSession.close();
         }
-        System.out.printf("parkingid: " + appointment.getParkingid());
-        iAppointment.increaseParkingNum(appointment.getParkingid());
-        sqlSession.commit();
-        sqlSession.close();
         res.put("code", 1);
         return res;
     }
