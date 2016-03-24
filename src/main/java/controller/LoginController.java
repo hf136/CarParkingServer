@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import pojo.User;
+import pojo.UserInfo;
 import util.DBUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,6 +43,18 @@ public class LoginController {
                 System.out.printf("add new oauth user: " + user.getId());
             } else {
                 httpSession.setAttribute("id", user.getId());
+            }
+            // 添加微博用户信息
+            UserInfo userInfo = new UserInfo();
+            userInfo.setUserid(user.getId());
+            userInfo.setNickname(req.getParameter("screen_name"));
+            userInfo.setAvatar(req.getParameter("profile_image_url"));
+            UserInfo tmp = iuser.getUserInfoById((user.getId()));
+            if(tmp == null){
+                iuser.addUserInfo(userInfo);
+            }
+            else {
+                iuser.updateUserInfo(userInfo);
             }
             session.commit();
         }
