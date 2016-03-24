@@ -20,4 +20,12 @@ public interface IAppointment {
     public List<AppointResult> getAppoints(@Param("userid") int userid);
 
     public int cancelAppoint(@Param("orderid") int orderid);
+
+    public Appointment getAppointment(@Param("orderid") int orderid);
+
+    public int updateStartTime(@Param("start_time") String start_time, @Param("orderid") int orderid, @Param("state") String state);
+
+    public int updateEndTime(@Param("end_time") String end_time, @Param("orderid") int orderid, @Param("state") String state);
+
+    public Appointment confirmCertificate(@Param("orderid") int orderid, @Param("certificate") String certificate);
 }

@@ -34,12 +34,24 @@
         WHERE appointment.parkingid = parking.id AND appointment.userid = #{userid}
     </select>
 
-    <select id="getAppointByOrderid" resultType="pojo.Appointment">
+    <select id="getAppointByOrderid" resultType="pojo.Appointment" parameterType="int">
         SELECT * FROM appointment WHERE id = #{orderid}
     </select>
     
     <delete id="cancelAppoint" parameterType="int">
         DELETE FROM appointment WHERE id = #{orderid}
     </delete>
+
+    <select id="getAppointment" parameterType="int" resultType="pojo.Appointment">
+        SELECT * FROM appointment WHERE id = #{orderid}
+    </select>
+
+    <update id="updateStartTime">
+        UPDATE appointment SET start_time = #{start_time}, state = #{state} WHERE id = #{orderid}
+    </update>
+
+    <update id="updateEndTime">
+      UPDATE appointment SET end_time = #{end_time}, state = #{state} WHERE id = #{orderid}
+    </update>
 
 </mapper>

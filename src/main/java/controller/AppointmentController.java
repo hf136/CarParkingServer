@@ -111,6 +111,26 @@ public class AppointmentController {
         try {
             IAppointment iAppointment = sqlSession.getMapper(IAppointment.class);
             List<AppointResult> appointments = iAppointment.getAppoints(userid);
+            for (int i = 0; i < appointments.size(); i++) {
+                AppointResult appointment = appointments.get(i);
+                // 15分钟未支付的订单自动取消
+                if(appointment.getState().equals("未支付")){
+                    DateTime createTime = DateTime.parse(appointment.getCreate_time().substring(0, appointment.getCreate_time().lastIndexOf('.')), DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
+                    if(createTime.plusMinutes(15).compareTo(DateTime.now()) < 0){
+                        appointment.setState("超时自动取消");
+                        // 停车场剩余停车位加 1
+                        iAppointment.increaseParkingNum(appointment.getParkingid());
+                        sqlSession.commit();
+                    }
+                }
+                // 构造二维码
+                else{
+                    String req_url = "http://10.4.21.211:8080/verification";
+                    String qrCode = req_url + "?certificate=" + appointment.getCertificate() + "&orderid=" + appointment.getId() + "&parkingid=" + appointment.getParkingid();
+                    System.out.println("qrCode: " + qrCode);
+                    appointment.setCertificate(qrCode);
+                }
+            }
             return appointments;
         }
         finally {
@@ -147,6 +167,7 @@ public class AppointmentController {
                 return res;
             }
             System.out.printf("parkingid: " + appointment.getParkingid());
+            // 停车场剩余停车位加 1
             iAppointment.increaseParkingNum(appointment.getParkingid());
             sqlSession.commit();
         }
@@ -155,6 +176,91 @@ public class AppointmentController {
         }
         res.put("code", 1);
         return res;
+    }
+
+    /**
+     * 二维码验证
+     * @param certificate
+     * @param parkingid
+     * @param orderid
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/verification", method = RequestMethod.GET)
+    public Map<String, Integer> verification(String certificate, Integer parkingid, Integer orderid){
+        Map<String, Integer> res = new HashMap<String, Integer>();
+        SqlSession sqlSession = DBUtil.openSession();
+        try{
+            IAppointment iAppointment = sqlSession.getMapper(IAppointment.class);
+            Appointment appointment = iAppointment.getAppointment(orderid);
+            if(appointment != null && appointment.getParkingid() == parkingid && appointment.getCertificate().equals(certificate)){
+                // 设置进入停车场时间
+                if(appointment.getState().equals("未消费")){
+                    DateTime dataTime = DateTime.now();
+                    iAppointment.updateStartTime(dataTime.toString("yyyy-MM-dd HH:mm:ss"), orderid, "停车中");
+                    res.put("code", 1);
+                    sqlSession.commit();
+                    return res;
+                }
+                // 设置离开停车场时间
+                else if(appointment.getState().equals("停车中")){
+                    DateTime startTime = DateTime.parse(appointment.getStart_time().substring(0, appointment.getStart_time().lastIndexOf('.')), DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
+                    // 停车时间不能小于一分钟
+                    if(startTime.plusMinutes(1).compareTo(DateTime.now()) > 0){
+                        res.put("code", 2);
+                        return res;
+                    }
+                    else {
+                        DateTime dateTime = DateTime.now();
+                        iAppointment.updateEndTime(dateTime.toString("yyyy-MM-dd HH:mm:ss"), orderid, "已消费");
+                        res.put("code", 1);
+                        sqlSession.commit();
+                        return res;
+                    }
+                }
+                else{
+                    res.put("code", 2);
+                }
+            }
+            else {
+                res.put("code", 2);
+            }
+        }
+        finally {
+            sqlSession.close();
+        }
+        return res;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/pay", method = RequestMethod.GET)
+    public Map<String, Integer> pay(Integer orderid) {
+        Map<String, Integer> res = new HashMap<String, Integer>();
+        SqlSession sqlSession = DBUtil.openSession();
+        try {
+            IAppointment iAppointment = sqlSession.getMapper(IAppointment.class);
+            Appointment appointment = iAppointment.getAppointment(orderid);
+            if(appointment.getState().equals("未支付")){
+                DateTime createTime = DateTime.parse(appointment.getCreate_time().substring(0, appointment.getCreate_time().lastIndexOf('.')), DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
+                // 超时之后不能支付
+                if(createTime.plusMinutes(15).compareTo(DateTime.now()) < 0) {
+                    res.put("code", 2);
+                    res.put("reason", 1);
+                    return res;
+                }
+                iAppointment.updateEndTime(null, orderid, "已支付");
+                res.put("code", 1);
+                sqlSession.commit();
+                return res;
+            }
+            else{
+                res.put("code", 2);
+                return res;
+            }
+        }
+        finally {
+            sqlSession.close();
+        }
     }
 
 }
