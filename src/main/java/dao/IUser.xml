@@ -27,4 +27,16 @@
         select * from user where id = #{id}
     </select>
 
+    <select id="getUserInfoById" parameterType="Integer" resultType="pojo.UserInfo" >
+        select * from userinfo where userid = #{userid}
+    </select>
+
+    <insert id="addUserInfo" parameterType="pojo.UserInfo">
+        insert into userinfo (userid, nickname, avatar, phone, sex) values (#{userid}, #{nickname}, #{avatar}, #{phone}, #{sex})
+    </insert>
+
+    <update id="updateUserInfo" parameterType="pojo.UserInfo">
+        UPDATE userinfo SET nickname=#{nickname}, avatar=#{avatar}, phone=#{phone}, sex=#{sex} WHERE userid=#{userid}
+    </update>
+
 </mapper>

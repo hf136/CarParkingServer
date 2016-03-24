@@ -2,6 +2,7 @@ package dao;
 
 import org.apache.ibatis.annotations.Param;
 import pojo.User;
+import pojo.UserInfo;
 
 import java.util.List;
 
@@ -21,4 +22,10 @@ public interface IUser {
     public User getUserWithOauth(@Param("username") String username, @Param("platform") String platform);
 
     public User getUserById(int id);
+
+    public UserInfo getUserInfoById(int userid);
+
+    public int addUserInfo(UserInfo userInfo);
+
+    public int updateUserInfo(UserInfo userInfo);
 }
