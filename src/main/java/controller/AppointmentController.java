@@ -13,6 +13,7 @@ import pojo.AppointResult;
 import pojo.Appointment;
 import sun.misc.BASE64Encoder;
 import util.DBUtil;
+import util.GenQrcode;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.MessageDigest;
@@ -126,9 +127,12 @@ public class AppointmentController {
                 // 构造二维码
                 else{
                     String req_url = "http://10.4.21.211:8080/verification";
-                    String qrCode = req_url + "?certificate=" + appointment.getCertificate() + "&orderid=" + appointment.getId() + "&parkingid=" + appointment.getParkingid();
+                    String qrCode = req_url + "?orderid=" + appointment.getId() + "&parkingid=" + appointment.getParkingid() + "&certificate=" + appointment.getCertificate();
                     System.out.println("qrCode: " + qrCode);
-                    appointment.setCertificate(qrCode);
+                    // 生成二维码图片
+                    String qrcodeImg = GenQrcode.getQrcode(qrCode);
+                    System.out.println("二维码图片地址: " + qrcodeImg);
+                    appointment.setCertificate(qrcodeImg);
                 }
             }
             return appointments;
