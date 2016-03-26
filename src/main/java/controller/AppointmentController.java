@@ -236,9 +236,15 @@ public class AppointmentController {
         return res;
     }
 
+    /**
+     * 支付
+     * @param orderidstr
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/pay", method = RequestMethod.GET)
-    public Map<String, Integer> pay(Integer orderid) {
+    public Map<String, Integer> pay(String orderidstr) {
+        Integer orderid = Integer.parseInt(orderidstr);
         Map<String, Integer> res = new HashMap<String, Integer>();
         SqlSession sqlSession = DBUtil.openSession();
         try {
