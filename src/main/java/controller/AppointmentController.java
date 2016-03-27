@@ -38,7 +38,7 @@ public class AppointmentController {
      */
     @ResponseBody
     @RequestMapping(value = "/appointment", method = RequestMethod.POST)
-    public Map<String, Integer> makeAppointment(@RequestBody Map<String, String> param, @ModelAttribute("id") Integer userid){
+    public Map<String, String> makeAppointment(@RequestBody Map<String, String> param, @ModelAttribute("id") Integer userid){
         Appointment appointment = new Appointment();
         System.out.println(param.get("parkingid"));
         // DateTime date = DateTime.parse(appointment.getTime(), DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
@@ -50,7 +50,7 @@ public class AppointmentController {
         appointment.setParkingid(Integer.parseInt(param.get("parkingid")));
         appointment.setTime(param.get("time"));
 
-        Map<String, Integer> res = new HashMap<String, Integer>();
+        Map<String, String> res = new HashMap<String, String>();
         SqlSession sqlSession = DBUtil.openSession();
 
         try {
@@ -60,7 +60,7 @@ public class AppointmentController {
                 sqlSession.rollback();
                 sqlSession.close();
                 System.out.println("库存不足");
-                res.put("code", 2);
+                res.put("code", "2");
                 return res;
             }
             // 设置预约订单信息
@@ -81,13 +81,22 @@ public class AppointmentController {
                 String certificate = base64Encoder.encode(md5.digest());
                 System.out.println("md5: " + certificate);
                 appointment.setCertificate(certificate);
+
+                // 构造二维码
+                String req_url = "http://10.4.21.211:8080/verification";
+                String qrCode = req_url + "?orderid=" + appointment.getId() + "&parkingid=" + appointment.getParkingid() + "&certificate=" + appointment.getCertificate();
+                System.out.println("qrCode: " + qrCode);
+                // 生成二维码图片
+                String qrcodeImg = GenQrcode.getQrcode(qrCode);
+                System.out.println("二维码图片地址: " + qrcodeImg);
+                res.put("certificate", qrcodeImg);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
             if (iappointment.addAppointment(appointment) == 0) {
                 sqlSession.rollback();
                 sqlSession.close();
-                res.put("code", 2);
+                res.put("code", "2");
                 return res;
             }
             sqlSession.commit();
@@ -95,8 +104,8 @@ public class AppointmentController {
         finally {
             sqlSession.close();
         }
-        res.put("code", 1);
-        res.put("orderid", appointment.getId());
+        res.put("code", "1");
+        res.put("orderid", String.valueOf(appointment.getId()));
         return res;
     }
 
@@ -149,6 +158,40 @@ public class AppointmentController {
         try {
             IAppointment iAppointment = sqlSession.getMapper(IAppointment.class);
             AppointResult appointment = iAppointment.getLatestAppoints(userid);
+            // 15分钟未支付的订单自动取消
+            if(appointment.getState().equals("未支付")){
+                DateTime createTime = DateTime.parse(appointment.getCreate_time().substring(0, appointment.getCreate_time().lastIndexOf('.')), DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));
+                if(createTime.plusMinutes(15).compareTo(DateTime.now()) < 0){
+                    appointment.setState("超时自动取消");
+                    // 停车场剩余停车位加 1
+                    iAppointment.increaseParkingNum(appointment.getParkingid());
+                    sqlSession.commit();
+                }
+            }
+            // 构造二维码
+            else{
+                String req_url = "http://10.4.21.211:8080/verification";
+                String qrCode = req_url + "?orderid=" + appointment.getId() + "&parkingid=" + appointment.getParkingid() + "&certificate=" + appointment.getCertificate();
+                System.out.println("qrCode: " + qrCode);
+                // 生成二维码图片
+                String qrcodeImg = GenQrcode.getQrcode(qrCode);
+                System.out.println("二维码图片地址: " + qrcodeImg);
+                appointment.setCertificate(qrcodeImg);
+            }
+            return appointment;
+        }
+        finally {
+            sqlSession.close();
+        }
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/appointment/{orderid}", method = RequestMethod.GET)
+    public AppointResult getAppointmentByid(@PathVariable Integer orderid){
+        SqlSession sqlSession = DBUtil.openSession();
+        try {
+            IAppointment iAppointment = sqlSession.getMapper(IAppointment.class);
+            AppointResult appointment = iAppointment.getAppointResult(orderid);
             // 15分钟未支付的订单自动取消
             if(appointment.getState().equals("未支付")){
                 DateTime createTime = DateTime.parse(appointment.getCreate_time().substring(0, appointment.getCreate_time().lastIndexOf('.')), DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss"));

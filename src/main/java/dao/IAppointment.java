@@ -25,6 +25,8 @@ public interface IAppointment {
 
     public Appointment getAppointment(@Param("orderid") int orderid);
 
+    public AppointResult getAppointResult(@Param("orderid") int orderid);
+
     public int updateStartTime(@Param("start_time") String start_time, @Param("orderid") int orderid, @Param("state") String state);
 
     public int updateEndTime(@Param("end_time") String end_time, @Param("orderid") int orderid, @Param("state") String state);

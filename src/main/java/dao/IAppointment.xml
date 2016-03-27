@@ -34,6 +34,24 @@
         WHERE appointment.parkingid = parking.id AND appointment.userid = #{userid}
     </select>
 
+    <select id="getAppointResult" resultType="pojo.AppointResult">
+        SELECT
+        appointment.id AS id,
+        appointment.userid AS userid,
+        appointment.parkingid as parkingid,
+        appointment.time AS time,
+        certificate AS certificate,
+        appointment.end_time AS end_time,
+        start_time AS start_time,
+        create_time AS create_time,
+        appointment.state AS state,
+        money AS money,
+        parking.name AS name,
+        parking.image AS image
+        FROM appointment, parking
+        WHERE appointment.parkingid = parking.id AND appointment.id = #{orderid}
+    </select>
+
     <select id="getLatestAppoints" resultType="pojo.AppointResult">
         SELECT
         appointment.id AS id,
