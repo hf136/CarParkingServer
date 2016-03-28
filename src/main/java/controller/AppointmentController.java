@@ -11,7 +11,9 @@ import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 import pojo.AppointResult;
 import pojo.Appointment;
+import pojo.AppointmentEntry;
 import sun.misc.BASE64Encoder;
+import util.AppointmentManager;
 import util.DBUtil;
 import util.GenQrcode;
 
@@ -50,6 +52,7 @@ public class AppointmentController {
         appointment.setParkingid(Integer.parseInt(param.get("parkingid")));
         appointment.setTime(param.get("time"));
 
+        AppointmentEntry appointmentEntry = new AppointmentEntry();
         Map<String, String> res = new HashMap<String, String>();
         SqlSession sqlSession = DBUtil.openSession();
 
@@ -68,6 +71,7 @@ public class AppointmentController {
             DateTime now = DateTime.now();
             String createTime = now.toString(timeFormat);
             System.out.println("now time: " + createTime);
+            appointmentEntry.setCreate_time(now);
             // 预约订单创建时间
             appointment.setCreate_time(createTime);
             // 预约状态
@@ -81,15 +85,6 @@ public class AppointmentController {
                 String certificate = base64Encoder.encode(md5.digest());
                 System.out.println("md5: " + certificate);
                 appointment.setCertificate(certificate);
-
-                // 构造二维码
-                String req_url = "http://10.4.21.211:8080/verification";
-                String qrCode = req_url + "?orderid=" + appointment.getId() + "&parkingid=" + appointment.getParkingid() + "&certificate=" + appointment.getCertificate();
-                System.out.println("qrCode: " + qrCode);
-                // 生成二维码图片
-                String qrcodeImg = GenQrcode.getQrcode(qrCode);
-                System.out.println("二维码图片地址: " + qrcodeImg);
-                res.put("certificate", qrcodeImg);
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             }
@@ -104,6 +99,21 @@ public class AppointmentController {
         finally {
             sqlSession.close();
         }
+
+        // 构造二维码
+        String req_url = "http://10.4.21.211:8080/verification";
+        String qrCode = req_url + "?orderid=" + appointment.getId() + "&parkingid=" + appointment.getParkingid() + "&certificate=" + appointment.getCertificate();
+        System.out.println("qrCode: " + qrCode);
+        // 生成二维码图片
+        String qrcodeImg = GenQrcode.getQrcode(qrCode);
+        System.out.println("二维码图片地址: " + qrcodeImg);
+        res.put("certificate", qrcodeImg);
+
+        // 添加到超时自动取消队列中
+        appointmentEntry.setId(appointment.getId());
+        appointmentEntry.setParkingid(appointment.getParkingid());
+        AppointmentManager.addAppointmentEntry(appointmentEntry);
+
         res.put("code", "1");
         res.put("orderid", String.valueOf(appointment.getId()));
         return res;

@@ -31,5 +31,7 @@ public interface IAppointment {
 
     public int updateEndTime(@Param("end_time") String end_time, @Param("orderid") int orderid, @Param("state") String state);
 
+    public int updateState(@Param("orderid") int orderid, @Param("state") String state);
+
     public Appointment confirmCertificate(@Param("orderid") int orderid, @Param("certificate") String certificate);
 }

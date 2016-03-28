@@ -92,4 +92,8 @@
       UPDATE appointment SET end_time = #{end_time}, state = #{state} WHERE id = #{orderid}
     </update>
 
+    <update id="updateState">
+        UPDATE appointment SET state = #{state} WHERE id = #{orderid}
+    </update>
+
 </mapper>

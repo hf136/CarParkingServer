@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginInterceptor implements HandlerInterceptor{
 
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        System.out.println("preHandle");
+        //System.out.println("preHandle");
         //System.out.println(httpServletRequest.getRequestURL());
         System.out.println(httpServletRequest.getRequestURI());
 
