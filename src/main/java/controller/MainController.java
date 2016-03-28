@@ -6,9 +6,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pojo.Parking;
 import pojo.User;
+import util.BaiduMapUtil;
 import util.DBUtil;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -73,7 +75,7 @@ public class MainController {
 
     @ResponseBody
     @RequestMapping(value = "/parkinglot", method = RequestMethod.GET)
-    public List<Parking> getParkingList() throws UnsupportedEncodingException {
+    public List<Parking> getParkingList() {
         SqlSession sqlSession = DBUtil.openSession();
         List<Parking> parkings;
         try {
@@ -84,5 +86,32 @@ public class MainController {
             sqlSession.close();
         }
         return parkings;
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/parkinglot/nearby/{radius}", method = RequestMethod.GET)
+    public List<Parking> getParkingNearbyList(String location, @PathVariable double radius) {
+        String[] str = location.split(",");
+        double longitude = Double.parseDouble(str[0]);
+        double latitude = Double.parseDouble(str[1]);
+        SqlSession sqlSession = DBUtil.openSession();
+        List<Parking> parkings;
+        List<Parking> parkingResultList = new ArrayList<Parking>();
+        try {
+            IParking iParking = sqlSession.getMapper(IParking.class);
+            parkings = iParking.getParkings();
+
+            for (int i = 0; i < parkings.size(); i++) {
+                double dist = BaiduMapUtil.GetShortDistance(longitude, latitude, parkings.get(i).getLongitude(), parkings.get(i).getLatitude());
+                System.out.println("dist: " + dist);
+                if(dist <= radius){
+                    parkingResultList.add(parkings.get(i));
+                }
+            }
+        }
+        finally {
+            sqlSession.close();
+        }
+        return parkingResultList;
     }
 }
