@@ -42,6 +42,7 @@ public class AppointmentManager {
                                     sqlSession.commit();
                                     System.out.println(DateTime.now().toString() + " 自动取消预约订单: " + appointmentEntry.getId());
                                     appointmentEntries.removeElementAt(i);
+                                    i--;
                                 }
                             }
                         }
