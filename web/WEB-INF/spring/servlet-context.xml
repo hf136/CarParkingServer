@@ -16,13 +16,13 @@
        <context:component-scan base-package="controller" ></context:component-scan>
 
        <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-              <property name="prefix" value="/WEB-INF/views/"></property>
+              <property name="prefix" value="/public/"></property>
               <property name="suffix" value=".jsp"></property>
        </bean>
 
        <mvc:annotation-driven />
 
-    <mvc:resources mapping="/public/**" location="/public/" />
+    <mvc:resources mapping="/admin/**" location="/public/" />
 
        <mvc:interceptors>
            <mvc:interceptor>

@@ -41,7 +41,7 @@
 <script src='js/jquery.popupoverlay.min.js'></script>
 
 <!-- Easy Pie Chart -->
-<script src='js/jquery.easypiechart.min.js'></script>
+<%--<script src='js/jquery.easypiechart.min.js'></script>--%>
 
 <!-- Sortable -->
 <script src='js/uncompressed/jquery.sortable.js'></script>

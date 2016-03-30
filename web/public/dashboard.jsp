@@ -24,25 +24,9 @@
             <div class="page-title">
               Dashboard
             </div>
-            <div class="page-sub-header">
-              Welcome Back, John Doe , <i class="fa fa-map-marker text-danger"></i> London
-            </div>
-          </div>
-          <div class="col-sm-6 text-right text-left-sm p-top-sm">
-            <div class="btn-group">
-              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-                Select Project <span class="caret"></span>
-              </button>
-              <ul class="dropdown-menu pull-right" role="menu">
-                <li><a href="#">Project1</a></li>
-                <li><a href="#">Project2</a></li>
-                <li><a href="#">Project3</a></li>
-                <li class="divider"></li>
-                <li><a href="#">Setting</a></li>
-              </ul>
-            </div>
-
-            <a class="btn btn-default"><i class="fa fa-cog"></i></a>
+            <%--<div class="page-sub-header">--%>
+              <%--Welcome Back, John Doe , <i class="fa fa-map-marker text-danger"></i> London--%>
+            <%--</div>--%>
           </div>
         </div>
 
@@ -50,17 +34,17 @@
           <div class="col-lg-3 col-sm-6">
             <div class="statistic-box bg-danger m-bottom-md">
               <div class="statistic-title">
-                Today Visitors
+                总收入
               </div>
 
               <div class="statistic-value">
-                96.7k
+                ${total}
               </div>
 
-              <div class="m-top-md">11% Higher than last week</div>
+              <%--<div class="m-top-md">7% Higher than last week</div>--%>
 
               <div class="statistic-icon-background">
-                <i class="ion-eye"></i>
+                <i class="ion-stats-bars"></i>
               </div>
             </div>
           </div>
@@ -68,14 +52,14 @@
           <div class="col-lg-3 col-sm-6">
             <div class="statistic-box bg-info m-bottom-md">
               <div class="statistic-title">
-                Today Sales
+                今日订单
               </div>
 
               <div class="statistic-value">
-                751
+                ${requestScope.order}
               </div>
 
-              <div class="m-top-md">8% Higher than last week</div>
+              <%--<div class="m-top-md">8% Higher than last week</div>--%>
 
               <div class="statistic-icon-background">
                 <i class="ion-ios7-cart-outline"></i>
@@ -86,17 +70,17 @@
           <div class="col-lg-3 col-sm-6">
             <div class="statistic-box bg-purple m-bottom-md">
               <div class="statistic-title">
-                Today Users
+                今日收入
               </div>
 
               <div class="statistic-value">
-                129
+                ${requestScope.income}
               </div>
 
-              <div class="m-top-md">3% Higher than last week</div>
+              <%--<div class="m-top-md">3% Higher than last week</div>--%>
 
               <div class="statistic-icon-background">
-                <i class="ion-person-add"></i>
+                <i class="ion-social-usd-outline"></i>
               </div>
             </div>
           </div>
@@ -104,17 +88,17 @@
           <div class="col-lg-3 col-sm-6">
             <div class="statistic-box bg-success m-bottom-md">
               <div class="statistic-title">
-                Today Earnings
+                剩余车位
               </div>
 
               <div class="statistic-value">
-                $124.45k
+                ${requestScope.available}
               </div>
 
-              <div class="m-top-md">7% Higher than last week</div>
+              <%--<div class="m-top-md">7% Higher than last week</div>--%>
 
               <div class="statistic-icon-background">
-                <i class="ion-stats-bars"></i>
+                <i class="ion-model-s"></i>
               </div>
             </div>
           </div>
@@ -183,7 +167,7 @@
           <div class="col-lg-6">
             <div class="smart-widget widget-dark-blue">
               <div class="smart-widget-header">
-                TOTAL SALES
+                总销售量
 									<span class="smart-widget-option">
 										<span class="refresh-icon-animated">
 											<i class="fa fa-circle-o-notch fa-spin"></i>

@@ -14,7 +14,8 @@ public class LoginInterceptor implements HandlerInterceptor{
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         //System.out.println("preHandle");
         //System.out.println(httpServletRequest.getRequestURL());
-        System.out.println(httpServletRequest.getRequestURI());
+        if(!httpServletRequest.getRequestURI().startsWith("/admin"))
+            System.out.println(httpServletRequest.getRequestURI());
 
 //        if(httpServletRequest.getSession().getAttribute("id") == null){
 //            if(httpServletRequest.getRequestURI().equals("/login")

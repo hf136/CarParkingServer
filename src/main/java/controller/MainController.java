@@ -4,6 +4,7 @@ import dao.IParking;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import pojo.Parking;
 import pojo.User;
 import util.BaiduMapUtil;
@@ -26,10 +27,14 @@ public class MainController {
         return id.toString();
     }
 
-    @RequestMapping("/test2")
-    @ResponseBody
-    public User test2(@RequestBody User user){
-        return user;
+    @RequestMapping("/admin/dashboard")
+    public ModelAndView dashboard(){
+        ModelAndView mv = new ModelAndView("dashboard");
+        mv.addObject("income", "239元");
+        mv.addObject("available", 23);
+        mv.addObject("total", "$123.45k");
+        mv.addObject("order", 35);
+        return mv;
     }
 
     @ResponseBody

@@ -15,7 +15,7 @@
           Main Menu
         </li>
         <li class="bg-palette1 active">
-          <a href="index.html">
+          <a href="">
 									<span class="menu-content block">
 										<span class="menu-icon"><i class="block fa fa-home fa-lg"></i></span>
 										<span class="text m-left-sm">Dashboard</span>

@@ -12,5 +12,6 @@
   </head>
   <body>
     <h1>Car Parking</h1>
+    <a href="admin/dashboard">dashboard</a>
   </body>
 </html>
