@@ -22,7 +22,7 @@
 
        <mvc:annotation-driven />
 
-    <!--<mvc:resources mapping="/css/**" location="/WEB_INF/spring" />-->
+    <mvc:resources mapping="/public/**" location="/public/" />
 
        <mvc:interceptors>
            <mvc:interceptor>

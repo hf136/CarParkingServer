@@ -101,11 +101,11 @@ public class MainController {
             IParking iParking = sqlSession.getMapper(IParking.class);
             parkings = iParking.getParkings();
 
-            for (int i = 0; i < parkings.size(); i++) {
-                double dist = BaiduMapUtil.GetShortDistance(longitude, latitude, parkings.get(i).getLongitude(), parkings.get(i).getLatitude());
+            for (Parking parking : parkings) {
+                double dist = BaiduMapUtil.GetShortDistance(longitude, latitude, parking.getLongitude(), parking.getLatitude());
                 System.out.println("dist: " + dist);
-                if(dist <= radius){
-                    parkingResultList.add(parkings.get(i));
+                if (dist <= radius) {
+                    parkingResultList.add(parking);
                 }
             }
         }
