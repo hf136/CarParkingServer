@@ -8,6 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 
+<a href="#" class="scroll-to-top hidden-print"><i class="fa fa-chevron-up fa-lg"></i></a>
+
 <!-- Le javascript
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->

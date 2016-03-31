@@ -12,6 +12,35 @@
   <div class="top-nav-inner">
     <!-- 导航栏左边 -->
     <div class="nav-header">
+      <button type="button" class="navbar-toggle pull-left sidebar-toggle" id="sidebarToggleSM">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <ul class="nav-notification pull-right">
+        <li>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog fa-lg"></i></a>
+          <span class="badge badge-danger bounceIn">1</span>
+          <ul class="dropdown-menu dropdown-sm pull-right user-dropdown">
+            <li class="user-avatar">
+              <img src="images/profile/profile1.jpg" alt="" class="img-circle">
+              <div class="user-content">
+                <h5 class="no-m-bottom">Jane Doe</h5>
+                <div class="m-top-xs">
+                  <a href="profile.html" class="m-right-sm">Profile</a>
+                  <a href="signin.html">Log out</a>
+                </div>
+              </div>
+            </li>
+            <li class="divider"></li>
+            <li>
+              <a href="#">Setting</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
       <a href="index.html" class="brand">
         <i class="fa fa-database"></i><span class="brand-name">车位管家</span>
       </a>
