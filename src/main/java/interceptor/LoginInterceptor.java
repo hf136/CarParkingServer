@@ -12,22 +12,27 @@ import javax.servlet.http.HttpServletResponse;
 public class LoginInterceptor implements HandlerInterceptor{
 
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
+        //此拦截器在AdminFilter之后拦截
         //System.out.println("preHandle");
         //System.out.println(httpServletRequest.getRequestURL());
-        if(!httpServletRequest.getRequestURI().startsWith("/admin"))
+        if(!httpServletRequest.getRequestURI().startsWith("/admin")) {
             System.out.println(httpServletRequest.getRequestURI());
+        }
+        else {
+            return true;
+        }
 
-//        if(httpServletRequest.getSession().getAttribute("id") == null){
-//            if(httpServletRequest.getRequestURI().equals("/login")
-//                    || httpServletRequest.getRequestURI().equals("/oauth")
-//                    || httpServletRequest.getRequestURI().equals("/register")){
-//                return true;
-//            }
-//            httpServletResponse.setHeader("Content-Type", "text/plain; charset=utf-8");
-//            httpServletResponse.getWriter().write("您还未登录，请登录！");
-//            httpServletResponse.getWriter().close();
-//            return false;
-//        }
+        if(httpServletRequest.getSession().getAttribute("id") == null){
+            if(httpServletRequest.getRequestURI().equals("/login")
+                    || httpServletRequest.getRequestURI().equals("/oauth")
+                    || httpServletRequest.getRequestURI().equals("/register")){
+                return true;
+            }
+            httpServletResponse.setHeader("Content-Type", "text/plain; charset=utf-8");
+            httpServletResponse.getWriter().write("您还未登录，请登录！");
+            httpServletResponse.getWriter().close();
+            return false;
+        }
         return true;
     }
 
