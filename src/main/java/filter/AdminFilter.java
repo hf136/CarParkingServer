@@ -19,7 +19,15 @@ public class AdminFilter  implements Filter{
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         //System.out.println(request.getRequestURI());
         if(request.getSession().getAttribute("puserid") == null){
-            if(!request.getRequestURI().startsWith("/admin/signin") && !request.getRequestURI().startsWith("/admin/signup")) {
+            if(!request.getRequestURI().startsWith("/admin/signin")
+                    && !request.getRequestURI().startsWith("/admin/signup")
+                    && !request.getRequestURI().startsWith("/admin/login")
+                    && !request.getRequestURI().startsWith("/admin/register")
+                    && !request.getRequestURI().startsWith("/admin/js")
+                    && !request.getRequestURI().startsWith("/admin/css")
+                    && !request.getRequestURI().startsWith("/admin/bootstrap")
+                    && !request.getRequestURI().startsWith("/admin/fonts")) {
+
                 HttpServletResponse response = (HttpServletResponse) servletResponse;
                 response.sendRedirect("/admin/signin.html");
             }

@@ -31,10 +31,10 @@
 
 					<form>
 						<div class="form-group m-bottom-md">
-							<input type="text" class="form-control" placeholder="Email Address">
+							<input id="username" name="username" type="text" class="form-control" placeholder="Username">
 						</div>
 						<div class="form-group">
-							<input type="password" class="form-control" placeholder="Password">
+							<input id="password" name="password" type="password" class="form-control" placeholder="Password">
 						</div>
 
 						<div class="form-group">
@@ -46,7 +46,7 @@
 						</div>
 
 						<div class="m-top-md p-top-sm">
-							<a href="index.html" class="btn btn-success block">登录</a>
+							<a href="#" class="btn btn-success block" onclick="login()">登录</a>
 						</div>
 
 						<div class="m-top-md p-top-sm">
@@ -84,6 +84,28 @@
 		
 		<!-- Simplify -->
 		<script src="js/simplify/simplify.js"></script>
+
+		<script>
+			function login(){
+				//console.log("login");
+				$.ajax({
+					type:"GET",
+					url:"/admin/login",
+					data:{username:$("#username").val(), password:$("#password").val()},
+					dataType:"json",
+					success:function(res){
+						//alert(res);
+						//console.log(res);
+						if(res["login"] == "success"){
+							window.location = "/admin/dashboard";
+						}
+						else{
+							alert("账号或密码错误！");
+						}
+					}
+				});
+			}
+		</script>
 	
   	</body>
 </html>

@@ -1,11 +1,13 @@
 package controller;
 
+import dao.IPuser;
 import dao.IUser;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import pojo.Puser;
 import pojo.User;
 import pojo.UserInfo;
 import util.DBUtil;
@@ -44,7 +46,7 @@ public class LoginController {
             } else {
                 httpSession.setAttribute("id", user.getId());
             }
-            // Ìí¼ÓÎ¢²©ÓÃ»§ÐÅÏ¢
+            // ï¿½ï¿½ï¿½Î¢ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ï¢
             UserInfo userInfo = new UserInfo();
             userInfo.setUserid(user.getId());
             userInfo.setNickname(req.getParameter("screen_name"));
@@ -127,6 +129,62 @@ public class LoginController {
     public String logout(HttpSession httpSession){
         httpSession.setAttribute("id", null);
         return "logout success";
+    }
+
+    @RequestMapping("/admin/login")
+    @ResponseBody
+    public Map<String, String> adminlogin(String username, String password, HttpSession httpSession){
+        System.out.println("/admin/login");
+        SqlSession sqlSession = DBUtil.openSession();
+        Map<String, String> map = new HashMap<String, String>();
+        try {
+            IPuser iPuser = sqlSession.getMapper(IPuser.class);
+            Puser puser = iPuser.getPuserByName(username);
+
+            if (puser == null || !puser.getPassword().equals(password)) {
+                map.put("login", "failed");
+            } else {
+                httpSession.setAttribute("puserid", puser.getId());
+                map.put("login", "success");
+            }
+            return map;
+        }
+        finally {
+            sqlSession.close();
+        }
+    }
+
+    @RequestMapping("/admin/register")
+    @ResponseBody
+    public Map<String, String> adminRegister(String username, String password){
+        System.out.println(username);
+        System.out.println(password);
+        SqlSession sqlSession = DBUtil.openSession();
+        Map<String, String> map = new HashMap<String, String>();
+        try {
+            IPuser iPuser = sqlSession.getMapper(IPuser.class);
+            Puser puser = iPuser.getPuserByName(username);
+
+            if (puser != null) {
+                map.put("register", "failed");
+                map.put("message", "username already have.");
+                return map;
+            }
+            puser = new Puser();
+            puser.setUsername(username);
+            puser.setPassword(password);
+
+            if (iPuser.addPuser(puser) == 1) {
+                map.put("register", "success");
+            } else {
+                map.put("register", "failed");
+            }
+            sqlSession.commit();
+        }
+        finally {
+            sqlSession.close();
+        }
+        return map;
     }
 
 }

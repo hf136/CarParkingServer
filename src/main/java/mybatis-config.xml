@@ -25,6 +25,7 @@
         <mapper resource="dao/IUser.xml"/>
         <mapper resource="dao/IParking.xml"></mapper>
         <mapper resource="dao/IAppointment.xml"></mapper>
+        <mapper resource="dao/IPuser.xml"></mapper>
     </mappers>
 
 </configuration>
