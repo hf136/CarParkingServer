@@ -229,6 +229,10 @@
     </div><!-- /main-container -->
 
   </div>
+
   <jsp:include page="template/footer.jsp"></jsp:include>
+
+  <script src="js/simplify/simplify_dashboard.js"></script>
+
 </body>
 </html>

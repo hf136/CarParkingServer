@@ -25,4 +25,8 @@
         SELECT * FROM daysales WHERE puserid = #{puserid} ORDER BY date;
     </select>
 
+    <select id="getAppointments" parameterType="int" resultType="pojo.Appointment">
+        SELECT * FROM appointment WHERE parkingid = #{parkingid};
+    </select>
+
 </mapper>

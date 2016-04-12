@@ -56,4 +56,3 @@
 
 <!-- Simplify -->
 <script src="js/simplify/simplify.js"></script>
-<script src="js/simplify/simplify_dashboard.js"></script>

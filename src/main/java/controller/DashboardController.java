@@ -1,6 +1,7 @@
 package controller;
 
 import dao.IAdminOperater;
+import dao.IAppointment;
 import org.apache.ibatis.session.SqlSession;
 import org.joda.time.DateTime;
 import org.springframework.stereotype.Controller;
@@ -44,6 +45,25 @@ public class DashboardController {
             Map<String, Integer> map = iAdminOperater.getTodayOrderAndIncome(parkingid, today);
             mv.addObject("income", map.get("income") == null ? "0元" : map.get("income") + "元");
             mv.addObject("order", map.get("order"));
+        }
+        finally {
+            sqlSession.close();
+        }
+        return mv;
+    }
+
+    @RequestMapping("/appointments")
+    public ModelAndView getAppointments(@ModelAttribute("puserid") Integer puserid){
+        ModelAndView mv = new ModelAndView("appointment");
+
+        SqlSession sqlSession = DBUtil.openSession();
+        try{
+            IAdminOperater iAdminOperater = sqlSession.getMapper(IAdminOperater.class);
+            Integer parkingid = iAdminOperater.getParkingid(puserid);
+            if(parkingid == null){
+                return mv;
+            }
+            mv.addObject("appointments", iAdminOperater.getAppointments(parkingid));
         }
         finally {
             sqlSession.close();

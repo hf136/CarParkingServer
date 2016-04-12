@@ -15,7 +15,7 @@
           Main Menu
         </li>
         <li class="bg-palette1 active">
-          <a href="">
+          <a href="dashboard">
 									<span class="menu-content block">
 										<span class="menu-icon"><i class="block fa fa-home fa-lg"></i></span>
 										<span class="text m-left-sm">Dashboard</span>
@@ -38,8 +38,8 @@
 									</span>
           </a>
           <ul class="submenu bg-palette4">
-            <li><a href="form_element.html"><span class="submenu-label">添加停车场</span></a></li>
-            <li><a href="#"><span class="submenu-label">预约列表</span></a></li>
+            <%--<li><a href="form_element.html"><span class="submenu-label">添加停车场</span></a></li>--%>
+            <li><a href="appointments"><span class="submenu-label">预约列表</span></a></li>
           </ul>
         </li>
 

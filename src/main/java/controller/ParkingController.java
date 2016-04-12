@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
 @RequestMapping("/parking")
-@SessionAttributes("parkingid")
+@SessionAttributes("puserid")
 public class ParkingController {
 
-    @RequestMapping("/appointment")
+    @RequestMapping("/appointments")
     public void getAppointments(){
 
     }
