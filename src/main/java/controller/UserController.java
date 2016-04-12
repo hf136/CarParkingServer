@@ -19,7 +19,7 @@ import java.util.Map;
 public class UserController {
 
     /**
-     * 获取用户信息
+     * 鑾峰彇鐢ㄦ埛淇℃伅
      * @param userid
      * @return
      */
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     /**
-     * 修改用户信息
+     * 淇敼鐢ㄦ埛淇℃伅
      * @param userid
      * @return
      */

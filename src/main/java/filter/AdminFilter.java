@@ -29,7 +29,9 @@ public class AdminFilter  implements Filter{
                     && !request.getRequestURI().startsWith("/admin/fonts")) {
 
                 HttpServletResponse response = (HttpServletResponse) servletResponse;
+                System.out.println("redirect /admin/signin.html");
                 response.sendRedirect("/admin/signin.html");
+                return ;
             }
         }
         filterChain.doFilter(servletRequest, servletResponse);

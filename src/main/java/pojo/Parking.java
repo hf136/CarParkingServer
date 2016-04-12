@@ -15,6 +15,7 @@ public class Parking {
     private int available;
     private String image;
     private String state;
+    private int puserid;
 
     public int getId() {
         return id;
@@ -94,6 +95,14 @@ public class Parking {
 
     public void setState(String state) {
         this.state = state;
+    }
+
+    public int getPuserid() {
+        return puserid;
+    }
+
+    public void setPuserid(int puserid) {
+        this.puserid = puserid;
     }
 
     @Override

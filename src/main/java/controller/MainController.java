@@ -1,7 +1,11 @@
 package controller;
 
+import dao.IAdminOperater;
+import dao.IAppointment;
 import dao.IParking;
 import org.apache.ibatis.session.SqlSession;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,6 +17,7 @@ import util.DBUtil;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wuyueqiu on 16-3-9.
@@ -25,16 +30,6 @@ public class MainController {
     @ResponseBody
     public String test(@ModelAttribute("id") Integer id){
         return id.toString();
-    }
-
-    @RequestMapping("/admin/dashboard")
-    public ModelAndView dashboard(){
-        ModelAndView mv = new ModelAndView("dashboard");
-        mv.addObject("income", "239元");
-        mv.addObject("available", 23);
-        mv.addObject("total", "$123.45k");
-        mv.addObject("order", 35);
-        return mv;
     }
 
     @ResponseBody

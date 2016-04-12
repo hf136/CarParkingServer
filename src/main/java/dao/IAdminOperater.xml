@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.IAdminOperater">
+
+    <select id="getParkingid" resultType="int" parameterType="int">
+        SELECT id FROM parking WHERE puserid = #{puserid};
+    </select>
+
+    <!--总收入-->
+    <select id="getTotalIncome" parameterType="int" resultType="long">
+        SELECT sum(money) FROM appointment WHERE parkingid = #{parkingid} and state!='未支付' and state!='已取消';
+    </select>
+
+    <!--获取今天的订单和收入-->
+    <select id="getTodayOrderAndIncome" resultType="map">
+        SELECT count(*) as 'order', sum(money) as 'income' FROM appointment WHERE parkingid = #{parkingid} and state!='未支付' and state!='已取消' and create_time like #{date};
+    </select>
+
+    <select id="getAvailableParking" parameterType="int" resultType="int">
+        SELECT available from parking where puserid = #{puserid};
+    </select>
+
+    <select id="getDashboardInfo" parameterType="int" resultType="pojo.DaySales">
+        SELECT * FROM daysales WHERE puserid = #{puserid} ORDER BY date;
+    </select>
+
+</mapper>
