@@ -46,7 +46,7 @@ public class LoginController {
             } else {
                 httpSession.setAttribute("id", user.getId());
             }
-            // ���΢���û���Ϣ
+            // 添加微博用户信息
             UserInfo userInfo = new UserInfo();
             userInfo.setUserid(user.getId());
             userInfo.setNickname(req.getParameter("screen_name"));
