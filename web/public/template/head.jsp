@@ -12,7 +12,8 @@
   <title>车位管家</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
-  <meta name="author" content="">
+  <meta name="author" content="wyq">
+  <link rel="shortcut icon" href="/admin/favicon.ico" >
 
   <!-- Bootstrap core CSS -->
   <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">

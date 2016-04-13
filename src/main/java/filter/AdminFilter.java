@@ -21,6 +21,7 @@ public class AdminFilter  implements Filter{
         if(request.getSession().getAttribute("puserid") == null){
             if(!request.getRequestURI().startsWith("/admin/signin")
                     && !request.getRequestURI().startsWith("/admin/signup")
+                    && !request.getRequestURI().equals("/favicon.ico")
                     && !request.getRequestURI().startsWith("/admin/login")
                     && !request.getRequestURI().startsWith("/admin/register")
                     && !request.getRequestURI().startsWith("/admin/js")
