@@ -25,7 +25,8 @@ public class LoginInterceptor implements HandlerInterceptor{
         if(httpServletRequest.getSession().getAttribute("id") == null){
             if(httpServletRequest.getRequestURI().equals("/login")
                     || httpServletRequest.getRequestURI().equals("/oauth")
-                    || httpServletRequest.getRequestURI().equals("/register")){
+                    || httpServletRequest.getRequestURI().equals("/register")
+                    || httpServletRequest.getRequestURI().equals("/verification")){
                 return true;
             }
             httpServletResponse.setHeader("Content-Type", "text/plain; charset=utf-8");
