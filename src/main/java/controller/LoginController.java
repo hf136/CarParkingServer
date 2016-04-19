@@ -154,6 +154,12 @@ public class LoginController {
         }
     }
 
+    @RequestMapping("/admin/logout")
+    public String adminlogout(HttpSession httpSession){
+        httpSession.setAttribute("puserid", null);
+        return "redirect:/admin/signin.html";
+    }
+
     @RequestMapping("/admin/register")
     @ResponseBody
     public Map<String, String> adminRegister(String username, String password){

@@ -8,7 +8,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
-    <title></title>
+    <title>car parking</title>
+    <link rel="shortcut icon" href="/admin/favicon.ico" >
   </head>
   <body>
     <h1>Car Parking</h1>
