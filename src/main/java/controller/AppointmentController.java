@@ -345,7 +345,7 @@ public class AppointmentController {
                     // res.put("reason", 1);
                     return res;
                 }
-                iAppointment.updateEndTime(null, order, "已支付");
+                iAppointment.updateEndTime(null, order, "未消费");
                 res.put("code", 1);
                 sqlSession.commit();
                 return res;
