@@ -23,6 +23,15 @@ public class AppointmentManager {
         appointmentEntries.add(appointmentEntry);
     }
 
+    public static void removeAppointmnetEntry(int id){
+        for (int i = 0; i < appointmentEntries.size(); i++) {
+            if(appointmentEntries.get(i).getId() == id){
+                appointmentEntries.remove(i);
+                return ;
+            }
+        }
+    }
+
     private static void run(){
         Thread thread = new Thread() {
             @Override

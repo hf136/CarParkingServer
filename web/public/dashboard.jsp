@@ -167,7 +167,7 @@
           <div class="col-lg-12">
             <div class="smart-widget widget-dark-blue">
               <div class="smart-widget-header">
-                总销售量
+                近7天预约订单量
 									<span class="smart-widget-option">
 										<span class="refresh-icon-animated">
 											<i class="fa fa-circle-o-notch fa-spin"></i>

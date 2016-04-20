@@ -348,6 +348,7 @@ public class AppointmentController {
                 iAppointment.updateEndTime(null, order, "未消费");
                 res.put("code", 1);
                 sqlSession.commit();
+                AppointmentManager.removeAppointmnetEntry(order);
                 return res;
             }
             else{
